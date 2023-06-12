@@ -9,7 +9,9 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "start": "npm run index.js",
+    "dev": "javac Employee.java && node index.js",
+    "start": "node index.js",
+    "build": "javac Employee.java",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "burhan.sancakli",
