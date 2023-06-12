@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "java-caller": "^2.7.0",
+    "save": "^2.9.0"
+  },
+  "name": "java_exam",
+  "version": "1.0.0",
+  "description": "java exam at Maribor University Organizational Scienes",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "npm run index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "burhan.sancakli",
+  "license": "ISC"
+}
