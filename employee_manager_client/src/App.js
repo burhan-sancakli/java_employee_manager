@@ -101,12 +101,13 @@ const App = () => {
           <input type="text" onChange={fetchOlderEmployees} placeholder="Enter age" />
         </Col>
         <Col>
-          Show Employees Age And Service Length<input type="checkbox" onChange={fetchEmployeesExtraStats}/>
+          Show Employees Age And Service Length <input type="checkbox" onChange={fetchEmployeesExtraStats}/>
         </Col>
         <Col>
-          Show Total Work Done<input type="checkbox" onChange={fetchEmployeesTotalWorkAmount}/>
+          Show Total Work Done <input type="checkbox" onChange={fetchEmployeesTotalWorkAmount}/>
         </Col>
       </Row>
+      <br></br>
       <Row>
         <Table striped bordered hover>
           <thead>
@@ -115,7 +116,7 @@ const App = () => {
               <th>Surname</th>
               <th>Name</th>
               <th>Number of Hours</th>
-              <th>Hourly Rate</th>
+              <th>Hourly Rate ($)</th>
               <th>Birth Date</th>
               <th>Job Date</th>
               <th>Value of Work Done ($)</th>
@@ -165,7 +166,7 @@ const App = () => {
                 <td>{employee.surname}</td>
                 <td>{employee.name}</td>
                 <td>{employee.number_of_hours}</td>
-                <td>{employee.hourly_rate}</td>
+                <td>{employee.hourly_rate}$</td>
                 <td className={olderEmployees.some((emp) => emp.id === employee.id) ? 'bg-danger' : ''}>{`${employee.birth_day}/${employee.birth_month}/${employee.birth_year}`}</td>
                 <td>{`${employee.job_day}/${employee.job_month}/${employee.job_year}`}</td>
                 <td>{Number(employee.value_of_work_done).toFixed()}$</td>
