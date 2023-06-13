@@ -26,23 +26,30 @@ const server = http.createServer(async function(req, res){
         } else if(req.url == "/get-all-employees"){
             const employees = await getAllEmployees();
             res.writeHead(200,{'Content-Type': 'application/json'});
-            res.end(JSON.stringify(employees), 'utf-8');
-    
-        } else if(req.url.startsWith("/get-employee-detail/")){  // TODO
-            const id = parseInt(req.url.split("/")[2]); // Extract the ID from the URL
-            if (id > 0){
-                const employee = null;//await getAllEmployees();
-                res.writeHead(200,{'Content-Type': 'application/json'});
-                res.end(JSON.stringify(employee), 'utf-8');
-            }
+            res.end(JSON.stringify(employees), 'utf-8');    
+        } else if(req.url.startsWith("/get-employees-total-work-amount")){
+            const parsedUrl = url.parse(req.url, true);
+            const query = parsedUrl.query;
+            const ids = query.ids.split(',').map(String);
+            const employeesTotalWorkAmount = await getEmployeesTotalWorkAmount(ids);
+            res.writeHead(200,{'Content-Type': 'application/json'});
+            res.end(JSON.stringify(employeesTotalWorkAmount), 'utf-8');
         } else if(req.url.startsWith("/get-employees-age-and-service")){
             const parsedUrl = url.parse(req.url, true);
             const query = parsedUrl.query;
             const ids = query.ids.split(',').map(String);
-
             const employeesAgeAndService = await getEmployeesAgeAndService(ids);
             res.writeHead(200,{'Content-Type': 'application/json'});
             res.end(JSON.stringify(employeesAgeAndService), 'utf-8');
+        } else if(req.url.startsWith("/get-employees-older-than/")){
+            const age = req.url.split("?")[0].split("/")[2]; // Extract the ID from the URL
+            const parsedUrl = url.parse(req.url, true);
+            const query = parsedUrl.query;
+            const ids = query.ids.split(',').map(String);
+            const employees = await getEmployeesOlderThan(age,ids);
+            res.writeHead(200,{'Content-Type': 'application/json'});
+            res.end(JSON.stringify(employees), 'utf-8');
+            
         } else {
             res.writeHead(404, {'Content-Type': 'text/plain'});
             res.end('Not found');
@@ -50,7 +57,7 @@ const server = http.createServer(async function(req, res){
         
     
     }
-    else if(req.method === "POST"){
+    else if(req.method === "POST"){  // unused
         if(req.url == "/get-employees-age"){
             let body = "";
             req.on("data", (chunk) => {
@@ -69,6 +76,38 @@ server.listen(process.env.PORT || 8080);
 async function getEmployeesAgeAndService(ids){
     try {
         var { status, stdout, stderr } = await callJava("get-employees-age-and-service", ids);
+        if(stdout) {
+            stdout = Buffer.from(stdout, 'base64').toString('utf-8');
+            return JSON.parse(stdout);
+        }
+        if(stderr){
+            console.log(stderr);
+        }
+    } catch (err) {
+        console.error("Nepričakovana napaka: " + err.message + "\n" + err.stack);
+    }
+    return [];
+}
+
+async function getEmployeesTotalWorkAmount(ids){
+    try {
+        var { status, stdout, stderr } = await callJava("get-employees-total-work-amount", ids);
+        if(stdout) {
+            stdout = Buffer.from(stdout, 'base64').toString('utf-8');
+            return JSON.parse(stdout);
+        }
+        if(stderr){
+            console.log(stderr);
+        }
+    } catch (err) {
+        console.error("Nepričakovana napaka: " + err.message + "\n" + err.stack);
+    }
+    return [];
+}
+
+async function getEmployeesOlderThan(age,ids){
+    try {
+        var { status, stdout, stderr } = await callJava("get-employees-older-than", [age, ...ids]);
         if(stdout) {
             stdout = Buffer.from(stdout, 'base64').toString('utf-8');
             return JSON.parse(stdout);

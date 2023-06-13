@@ -45,7 +45,7 @@ public class Employee {
     }
 
     private int getAge() {
-        return (int) calculateDateDifference(this.birth_day, this.birth_month, this.birth_year);
+        return ((int) calculateDateDifference(this.birth_day, this.birth_month, this.birth_year)) / 365;
     }
 
     private long getServiceLength() {
@@ -158,7 +158,7 @@ public class Employee {
         return json;
     }
 
-    private static String getEmployeesAgeAndServiceLengthJson(ArrayList<Employee> employees, int[] ids) {
+    private static String getEmployeesAgeAndServiceLengthJson(ArrayList<Employee> employees) {
         String json = "[";
         boolean isFirst = true;
         for (Employee employee : employees) {
@@ -170,6 +170,33 @@ public class Employee {
                     + employee.getServiceLength() + " }";
         }
         json += "]";
+        return json;
+    }
+
+    private static String getEmployeesOlderThanJson(ArrayList<Employee> employees, int age) {
+        String json = "[";
+        boolean isFirst = true;
+        for (Employee employee : employees) {
+            if (employee.getAge() < age) {
+                continue;
+            }
+            if (!isFirst) {
+                json += ",";
+            }
+            isFirst = false;
+            json += "{\"id\": " + employee.id + " }";
+        }
+        json += "]";
+        return json;
+    }
+
+    private static String getEmployeesTotalWorkAmountJson(ArrayList<Employee> employees) {
+        String json = "";
+        double totalWorkAmount = 0;
+        for (Employee employee : employees) {
+            totalWorkAmount += employee.value_of_work_done;
+        }
+        json = "{ \"total_work_amount\": " + (int) totalWorkAmount + " }";
         return json;
     }
 
@@ -194,7 +221,26 @@ public class Employee {
                     ids[i - 1] = Integer.parseInt(args[i]);
                 }
                 ArrayList<Employee> limitedEmployees = getAllEmployeesWithIds(FILE_DEST, ids);
-                response = getEmployeesAgeAndServiceLengthJson(limitedEmployees, ids);
+                response = getEmployeesAgeAndServiceLengthJson(limitedEmployees);
+                break;
+
+            case "get-employees-older-than":
+                int age = Integer.parseInt(args[1]);
+                int[] idsOlderThan = new int[args.length - 2];
+                for (int i = 2; i < args.length; i++) {
+                    idsOlderThan[i - 2] = Integer.parseInt(args[i]);
+                }
+                ArrayList<Employee> olderEmployees = getAllEmployeesWithIds(FILE_DEST, idsOlderThan);
+                response = getEmployeesOlderThanJson(olderEmployees, age);
+                break;
+
+            case "get-employees-total-work-amount":
+                int[] someIds = new int[args.length - 1];
+                for (int i = 1; i < args.length; i++) {
+                    someIds[i - 1] = Integer.parseInt(args[i]);
+                }
+                ArrayList<Employee> someEmployees = getAllEmployeesWithIds(FILE_DEST, someIds);
+                response = getEmployeesTotalWorkAmountJson(someEmployees);
                 break;
 
             // Default case
