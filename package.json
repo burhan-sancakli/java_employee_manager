@@ -1,17 +1,19 @@
 {
   "dependencies": {
     "java-caller": "^2.7.0",
+    "node-static": "^0.7.11",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "save": "^2.9.0"
   },
   "name": "java_exam",
   "version": "1.0.0",
   "description": "java exam at Maribor University Organizational Scienes",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
-    "dev": "javac Employee.java && node index.js",
+    "dev": "javac Employee.java && cd employee_manager_client && npm run build && cd .. && node index.js",
     "start": "node index.js",
-    "build": "javac Employee.java",
+    "build": "javac Employee.java && cd employee_manager_client && npm run build && cd ..",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "burhan.sancakli",

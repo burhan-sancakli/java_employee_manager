@@ -40,8 +40,7 @@ public class Employee {
     }
 
     private double calculateValueOfWorkDone() {
-        long days_of_work = this.getServiceLength();
-        return Double.valueOf(days_of_work * this.number_of_hours * this.hourly_rate);
+        return Double.valueOf(this.number_of_hours * this.hourly_rate);
     }
 
     private int getAge() {
@@ -50,7 +49,7 @@ public class Employee {
 
     private long getServiceLength() {
         long days_of_work = calculateDateDifference(this.job_day, this.job_month, this.job_year);
-        return days_of_work;
+        return days_of_work / 365;
     }
 
     public static long calculateDateDifference(int job_day, int job_month, int job_year) {
