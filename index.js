@@ -44,7 +44,7 @@ const server = http.createServer(async function(req, res){
             } else if(req.url == "/get-all-employees"){
                 const employees = await getAllEmployees();
                 res.writeHead(200,{'Content-Type': 'application/json'});
-                res.end(JSON.stringify(employees), 'utf-8');    
+                res.end(JSON.stringify(employees), 'utf-8');
             } else if(req.url.startsWith("/get-employees-total-work-amount")){
                 const parsedUrl = url.parse(req.url, true);
                 const query = parsedUrl.query;

@@ -91,6 +91,7 @@ const App = () => {
   return (
     <div class="px-5">
       <h1>Employee Table</h1>
+      <h5>Author: <a href='https://www.linkedin.com/in/burhan-sancakli/'>Burhan Sancakli</a></h5>
       <Row>
         <Col>
           <Button variant="primary" onClick={fetchEmployees}>
